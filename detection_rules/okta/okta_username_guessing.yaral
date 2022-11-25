@@ -1,0 +1,19 @@
+rule okta_username_guessing {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when there are too many failed username guesses. i.e., someone potentially trying to guess the username format in order to launch a bruteforce attack"
+    severity = "Low"
+
+  events:
+    $udm.metadata.vendor_name = "Okta" nocase
+    $udm.metadata.product_name = "Okta" nocase
+    $udm.metadata.product_event_type = "user.session.start" nocase
+    $udm.security_result.category_details = "VERIFICATION_ERROR" nocase
+    $ip = $udm.principal.ip
+
+  match:
+    $ip over 30m
+
+  condition:
+    #udm >= 1
+}

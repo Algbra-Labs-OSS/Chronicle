@@ -1,0 +1,17 @@
+rule okta_creation_of_user_outside_of_automation {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when an Okta user account is created outside of the approved automation process"
+    severity = "High"
+
+  events:
+    $udm.metadata.vendor_name = "Okta" nocase
+    $udm.metadata.product_name = "Okta" nocase
+    $udm.metadata.product_event_type = "user.lifecycle.create" nocase
+    $user = $udm.principal.user.userid
+    // add your automation/terraform Okta account here
+    // $user != "" nocase
+
+  condition:
+    $udm
+}

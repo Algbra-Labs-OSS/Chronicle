@@ -1,0 +1,29 @@
+rule okta_user_login_multiple_geolocations {
+  meta:
+    author = "Algbra (Mikail Tunç) | SEP2 (Jon Cumiskey)"
+    description = "Matches if an Okta user is seen across more than 1 geographic location in a short space of time"
+    severity = "High"
+
+  events:
+      (
+          $udm.metadata.vendor_name = "Okta" nocase and
+          $udm.metadata.product_name = "Okta" nocase and
+          $udm.metadata.event_type = "USER_LOGIN" and not
+          $udm.metadata.product_event_type = "security.request.blocked"
+      )
+
+    // some okta authentication events have an IP from Okta datacenters so we exclude them here
+    not (
+        $udm.metadata.product_event_type = "user.authentication.sso" and
+        any $udm.security_result.detection_fields.value = "amazonaws.com"
+        )
+
+    $country = $udm.principal.location.country_or_region
+    $user = $udm.principal.user.userid
+
+  match:
+    $user over 15m
+
+  condition:
+    #country > 1
+}

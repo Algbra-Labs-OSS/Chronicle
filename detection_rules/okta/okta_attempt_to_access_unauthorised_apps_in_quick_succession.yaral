@@ -1,0 +1,20 @@
+rule okta_attempt_to_access_unauthorised_apps_in_quick_succession {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when a user tries to access more than the defined threshold of apps in quick succession"
+    severity = "Medium"
+
+  events:
+      $udm.metadata.vendor_name = "Okta" nocase
+      $udm.metadata.product_name = "Okta" nocase
+      $udm.metadata.event_type = "USER_LOGIN"
+      $udm.metadata.product_event_type = "app.generic.unauth_app_access_attempt" nocase
+      $application_id = $udm.target.resource.product_object_id
+      $user = $udm.principal.user.userid
+    
+  match:
+      $user over 15m
+
+  condition:
+    #application_id > 1
+}

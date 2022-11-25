@@ -1,0 +1,19 @@
+rule github_protected_branch_override {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when a GitHub user overrides a branch protection policy"
+    severity = "Medium"
+
+  events:
+    $udm.metadata.vendor_name = "GITHUB" nocase
+    $udm.metadata.product_name = "GITHUB" nocase
+    $udm.metadata.product_event_type = "protected_branch.policy_override" nocase
+    $user = $udm.principal.user.userid
+    $repository = $udm.target.resource.name
+
+    // exclusions for any automation/CICD accounts
+    // $user != "" nocase
+
+  condition:
+    $udm
+}

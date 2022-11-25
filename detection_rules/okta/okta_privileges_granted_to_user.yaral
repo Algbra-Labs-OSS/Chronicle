@@ -1,0 +1,19 @@
+rule okta_privileges_granted_to_user {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when privileges are granted to an Okta user or group"
+    severity = "High"
+
+  events:
+    (
+        $udm.metadata.vendor_name = "Okta" nocase and 
+        $udm.metadata.product_name = "Okta" nocase
+        ) and 
+        (
+            $udm.metadata.product_event_type = "user.account.privilege.grant" nocase or 
+            $udm.metadata.product_event_type = "group.privilege.grant" nocase
+            )
+
+  condition:
+    $udm
+}

@@ -1,0 +1,15 @@
+rule google_workspace_file_emailed_from_drive {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when a Drive file is emailed using the 'File --> Email' menu"
+    severity = "Low"
+
+  events:
+    $udm.metadata.vendor_name = "Google Workspace" nocase
+    $udm.metadata.product_name = "drive" nocase
+    $udm.metadata.event_type = "EMAIL_TRANSACTION"
+    $udm.metadata.product_event_type = "email_as_attachment" nocase
+
+  condition:
+    $udm
+}

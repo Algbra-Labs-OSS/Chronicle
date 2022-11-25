@@ -1,0 +1,22 @@
+rule github_repository_cloned {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when a GitHub user has cloned a number of unique repositories within a short space of time"
+    severity = "Medium"
+
+  events:
+    $udm.metadata.vendor_name = "GITHUB" nocase
+    $udm.metadata.product_name = "GITHUB" nocase
+    $udm.metadata.product_event_type = "git.clone" nocase
+    $user = $udm.principal.user.userid
+    $repository = $udm.target.resource.name
+    
+    // add exclusions to users below; e.g., automation/CICD accounts, etc
+    // $user != "" nocase
+
+  match:
+    $user over 15m
+
+  condition:
+    $udm and #repository >= 5
+}

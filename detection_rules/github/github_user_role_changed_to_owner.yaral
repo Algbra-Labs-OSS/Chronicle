@@ -1,0 +1,14 @@
+rule github_user_role_changed_to_owner {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when a GitHub user's role is changed to 'Owner'"
+    severity = "Medium"
+  events:
+    $udm.metadata.vendor_name = "GITHUB" nocase
+    $udm.metadata.product_name = "GITHUB" nocase
+    $udm.metadata.product_event_type = "org.update_member" nocase
+    // waiting for an update to the parser so that we can be more granular and only alert when someone is given the admin permission
+
+  condition:
+    $udm
+}

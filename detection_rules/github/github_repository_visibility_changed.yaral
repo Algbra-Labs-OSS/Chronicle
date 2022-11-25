@@ -1,0 +1,14 @@
+rule github_repository_visibility_changed {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when the visibility setting of a GitHub repository changes"
+    severity = "Medium"
+  events:
+    $udm.metadata.vendor_name = "GITHUB" nocase
+    $udm.metadata.product_name = "GITHUB" nocase
+    $udm.metadata.product_event_type = "repo.access" nocase
+    // waiting for an update to the parser so that we can be more granular and only alert when a repository is made public
+
+  condition:
+    $udm
+}

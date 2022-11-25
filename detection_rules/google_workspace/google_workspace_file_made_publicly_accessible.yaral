@@ -1,0 +1,16 @@
+rule google_workspace_make_file_publicly_accessible {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when a file permission is changed to allow 'anyone with link' to access/view/download"
+    severity = "Low"
+
+  events:
+    $udm.metadata.vendor_name = "Google Workspace" nocase
+    $udm.metadata.product_name = "drive" nocase
+    $udm.metadata.event_type = "USER_RESOURCE_UPDATE_PERMISSIONS"
+    $udm.metadata.product_event_type = "change_document_access_scope" nocase
+    any $udm.about.labels.value = "people_with_link"
+
+  condition:
+    $udm
+}

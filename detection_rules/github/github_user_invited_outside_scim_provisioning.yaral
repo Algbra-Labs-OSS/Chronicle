@@ -1,0 +1,16 @@
+rule github_user_invited_outside_scim_provisioning {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when a GitHub user is invited outside of the SCIM provisioning process"
+    severity = "Medium"
+  events:
+    $udm.metadata.vendor_name = "GITHUB" nocase
+    $udm.metadata.product_name = "GITHUB" nocase
+    $udm.metadata.product_event_type = "org.invite_member" nocase
+    $user = $udm.principal.user.userid
+    // add SCIM provisioning service account below
+    // $user != ""
+
+  condition:
+    $udm
+}

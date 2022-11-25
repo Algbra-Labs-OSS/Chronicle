@@ -1,0 +1,19 @@
+rule okta_failed_logins_single_account {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when there are failed logins for any given Okta user account over a period of time"
+    severity = "Low"
+
+  events:
+    $udm.metadata.vendor_name = "Okta" nocase
+    $udm.metadata.product_name = "Okta" nocase
+    $udm.metadata.product_event_type = "user.authentication.auth_via_mfa" nocase
+    $udm.security_result.category_details = "INVALID_CREDENTIALS" nocase
+    $user = $udm.principal.user.userid
+
+  match:
+    $user over 5m
+
+  condition:
+    #udm >= 3
+}
