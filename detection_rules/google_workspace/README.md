@@ -1,0 +1,1 @@
+A lot of useful rules can be found here: https://github.com/chronicle/detection-rules/tree/main/google_workspace

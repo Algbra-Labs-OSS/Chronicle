@@ -1,0 +1,17 @@
+rule slack_excessive_downloads {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when a threshold of files are downloaded from a single user over a period of time"
+    severity = "Low"
+  events:
+    $udm.metadata.vendor_name = "Slack" nocase
+    $udm.metadata.product_event_type = "file_downloaded" nocase
+    $filename = $udm.target.resource.name
+    $user = $udm.principal.user.email_addresses
+    
+  match:
+    $user over 5m
+
+  condition:
+    #filename >= 10
+}

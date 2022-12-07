@@ -1,0 +1,14 @@
+rule okta_creation_of_api_key {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when an Okta API key is created"
+    severity = "High"
+
+  events:
+    $udm.metadata.vendor_name = "Okta" nocase
+    $udm.metadata.product_name = "Okta" nocase
+    $udm.metadata.product_event_type = "system.api_token.create" nocase
+
+  condition:
+    $udm
+}

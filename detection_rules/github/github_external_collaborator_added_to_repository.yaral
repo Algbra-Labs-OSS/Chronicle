@@ -1,0 +1,13 @@
+rule github_external_collaborator_added_to_repository {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when an external collaborator is added to a repository"
+    severity = "Low"
+  events:
+    $udm.metadata.vendor_name = "GITHUB" nocase
+    $udm.metadata.product_name = "GITHUB" nocase
+    $udm.metadata.product_event_type = "repo.add_member" nocase
+
+  condition:
+    $udm
+}

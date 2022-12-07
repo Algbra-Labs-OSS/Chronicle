@@ -1,0 +1,12 @@
+rule slack_anomaly_detected {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when Slack thinks a behaviour was anomalous. See the log for more details."
+    severity = "High"
+  events:
+    $udm.metadata.vendor_name = "Slack" nocase
+    $udm.metadata.product_event_type = "anomaly" nocase
+    
+  condition:
+    $udm
+}

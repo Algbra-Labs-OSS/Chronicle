@@ -1,0 +1,12 @@
+rule github_repository_transferred_out {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when a GitHub repository is transferred to another user/organisation"
+    severity = "High"
+  events:
+    ($udm.metadata.vendor_name = "GITHUB" nocase and $udm.metadata.product_name = "GITHUB" nocase) and
+    ($udm.metadata.product_event_type = "repo.transfer_outgoing" nocase or $udm.metadata.product_event_type = "repo.transfer_start" nocase)
+
+  condition:
+    $udm
+}

@@ -1,0 +1,22 @@
+rule slack_export_activity {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when export activity takes place. This should not be common."
+    severity = "High"
+
+  events:
+    $udm.metadata.vendor_name = "Slack" nocase and
+    (
+        $udm.metadata.product_event_type = "channels_export_downloaded" nocase or
+        $udm.metadata.product_event_type = "channels_export_started" nocase or
+        $udm.metadata.product_event_type = "manual_export_downloaded" nocase or
+        $udm.metadata.product_event_type = "manual_export_started" nocase or
+        $udm.metadata.product_event_type = "manual_user_export_downloaded" nocase or
+        $udm.metadata.product_event_type = "manual_user_export_started" nocase or
+        $udm.metadata.product_event_type = "scheduled_export_downloaded" nocase or
+        $udm.metadata.product_event_type = "scheduled_export_started" nocase
+    )
+
+  condition:
+    $udm
+}

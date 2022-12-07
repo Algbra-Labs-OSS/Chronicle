@@ -1,0 +1,14 @@
+rule slack_primary_owner_login {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when a successful login of the Slack primary owner occurs. This should be rare."
+    severity = "High"
+  events:
+    $udm.metadata.vendor_name = "Slack" nocase
+    $udm.metadata.product_event_type = "user_login" nocase
+    // email address of primary owner
+    $udm.principal.user.email_addresses = "" 
+    
+  condition:
+    $udm
+}

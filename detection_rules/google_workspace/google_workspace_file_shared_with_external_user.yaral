@@ -1,0 +1,17 @@
+rule google_workspace_file_shared_with_external_user {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when a Drive file is shared with a non @corporate domain"
+    severity = "Low"
+
+  events:
+    $udm.metadata.event_type = "USER_RESOURCE_UPDATE_PERMISSIONS"
+    $udm.metadata.vendor_name = "Google Workspace" nocase
+    $udm.metadata.product_name = "drive" nocase
+    $target_user = $udm.target.user.userid
+    not re.regex($udm.target.user.userid, `.*example\.com$`) nocase
+    not $target_user = "" nocase
+
+  condition:
+    $udm
+}

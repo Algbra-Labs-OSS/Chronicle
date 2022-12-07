@@ -1,0 +1,20 @@
+rule google_workspace_file_downloads_internal_user {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when a threshold of files are downloaded from Drive by internal users"
+    severity = "High"
+
+  events:
+    $udm.metadata.vendor_name = "Google Workspace" nocase
+    $udm.metadata.product_name = "drive" nocase
+    $udm.metadata.event_type = "USER_RESOURCE_ACCESS"
+    $udm.metadata.product_event_type = "download" nocase
+    $user = $udm.principal.user.email_addresses
+    re.regex($user, `.*example\.com$`) nocase
+
+  match:
+    $user over 5m
+
+  condition:
+    #udm >= 5
+}

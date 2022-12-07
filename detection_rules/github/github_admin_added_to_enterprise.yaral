@@ -1,0 +1,13 @@
+rule github_admin_added_to_enterprise {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when an enterprise owner or site administrator is added to an enterprise"
+    severity = "Medium"
+  events:
+    $udm.metadata.vendor_name = "GITHUB" nocase
+    $udm.metadata.product_name = "GITHUB" nocase
+    $udm.metadata.product_event_type = "business.add_admin" nocase
+
+  condition:
+    $udm
+}
