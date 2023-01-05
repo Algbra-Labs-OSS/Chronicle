@@ -10,7 +10,6 @@ rule okta_account_sharing {
     $udm.metadata.product_event_type = "user.session.start" nocase
     $udm.security_result.action = "ALLOW"
     $user = $udm.principal.user.userid        
-
     // add exclusion(s) for any IPs you expect multiple identities to be signing in from. e.g., Office IP, VPN gateway, etc.
     // $udm.principal.ip != ""
     $ip = $udm.principal.ip

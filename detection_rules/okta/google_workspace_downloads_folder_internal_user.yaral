@@ -1,0 +1,23 @@
+rule google_workspace_downloads_folder_internal_user {
+  meta:
+    author = "Algbra (Mikail Tunç) | SEP2 (Adam Smith)"
+    description = "Matches when someone right click --> downloads one or more folders from Drive. Works by matching exact timestamps across >1 file."
+    severity = "Medium"
+
+  events:
+    $filedownload_event.metadata.product_event_type = "download" nocase
+    $filedownload_event.metadata.vendor_name = "Google Workspace" nocase
+    $filedownload_event.metadata.product_name = "drive" nocase
+    $filedownload_event.metadata.event_type = "USER_RESOURCE_ACCESS"
+    $filedownload_event.target.resource.name = $filename
+    $filedownload_event.metadata.event_timestamp.nanos = $timestamp
+    $filedownload_event.principal.user.email_addresses = $username
+    //add your corporate domain here
+    re.regex($username, `.*example\.com$`) nocase
+
+  match:
+    $username,$timestamp over 1m after $filedownload_event 
+
+  condition:
+    #filedownload_event > 1
+}
