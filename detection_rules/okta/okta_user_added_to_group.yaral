@@ -1,0 +1,26 @@
+rule okta_user_added_to_group {
+  meta:
+    author = "Algbra (Mikail Tunç) | SEP2 (Jon Cumiskey)"
+    description = "Matches when an Okta user is added to a group but not if it happened immediately after creation of the user or group"
+    severity = "Low"
+
+  events:
+    $e1.metadata.product_event_type = "user.lifecycle.create" nocase
+    $user = $e1.target.user.userid
+    $group = $e1.target.group.group_display_name 
+    $princuser = $e1.principal.user.userid
+
+    $e2.metadata.product_event_type = "group.user_membership.add" nocase
+    $user = $e2.target.user.userid
+    $princuser = $e1.principal.user.userid
+
+    $e3.metadata.product_event_type = "group.lifecycle.create" nocase
+    $group = $e3.target.group.group_display_name
+    $princuser = $e1.principal.user.userid
+
+  match:
+    $user over 1m before $e2
+
+  condition:
+    $e2 and !$e1 and !$e3
+}

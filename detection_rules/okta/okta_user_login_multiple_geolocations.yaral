@@ -11,12 +11,15 @@ rule okta_user_login_multiple_geolocations {
           $udm.metadata.event_type = "USER_LOGIN" and not
           $udm.metadata.product_event_type = "security.request.blocked"
       )
-
-    // some okta authentication events have an IP from Okta datacenters so we exclude them here
-    not (
-        $udm.metadata.product_event_type = "user.authentication.sso" and
-        any $udm.security_result.detection_fields.value = "amazonaws.com"
-        )
+      // some okta authentication events have an IP from Okta datacenters so we exclude them here
+      not (
+          $udm.metadata.product_event_type = "user.authentication.sso" and
+          any $udm.security_result.detection_fields.value = "amazonaws.com"
+          )
+      not (
+          $udm.metadata.product_event_type = "user.authentication.sso" and
+          any $udm.security_result.detection_fields.value = "amazon.com inc"
+          )
 
     $country = $udm.principal.location.country_or_region
     $user = $udm.principal.user.userid

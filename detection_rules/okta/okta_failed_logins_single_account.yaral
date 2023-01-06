@@ -7,7 +7,7 @@ rule okta_failed_logins_single_account {
   events:
     $udm.metadata.vendor_name = "Okta" nocase
     $udm.metadata.product_name = "Okta" nocase
-    $udm.metadata.product_event_type = "user.authentication.auth_via_mfa" nocase
+    $udm.metadata.product_event_type = "user.session.start" nocase
     $udm.security_result.category_details = "INVALID_CREDENTIALS" nocase
     $user = $udm.principal.user.userid
 
