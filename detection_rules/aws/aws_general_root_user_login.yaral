@@ -1,0 +1,15 @@
+rule aws_general_root_user_login {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when there is a login event by the root user. This should be rare."
+    severity = "High"
+
+  events:
+    $udm.metadata.vendor_name = "AMAZON" nocase
+    $udm.metadata.product_name = "AWS CloudTrail" nocase
+    $udm.metadata.event_type = "USER_LOGIN"
+    $udm.principal.resource.type = "Root" nocase
+    
+  condition:
+    $udm
+}
