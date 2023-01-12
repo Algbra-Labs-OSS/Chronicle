@@ -1,0 +1,14 @@
+rule aws_guardduty_alert {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when there is a GuardDuty alert/finding. Ignores test/sample findings."
+    severity = "High"
+    
+  events:
+    $udm.metadata.vendor_name = "AMAZON" nocase
+    $udm.metadata.product_name = "AWS GuardDuty" nocase
+    not any $udm.security_result.about.labels.key = "Sample" nocase
+
+  condition:
+    $udm
+}
