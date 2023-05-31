@@ -1,0 +1,16 @@
+rule aws_console_logins_not_sso {
+  meta:
+    author = "Algbra (Mikail Tunç)"
+    description = "Matches when there are console logins that aren't SSO"
+    severity = "High"
+    
+  events:
+    $udm.metadata.vendor_name = "AMAZON" nocase
+    $udm.metadata.product_name = "AWS CloudTrail" nocase
+    $udm.metadata.event_type = "USER_LOGIN"
+    $udm.metadata.product_event_type = "ConsoleLogin" nocase
+    $udm.target.user.user_display_name != /AWSReservedSSO/
+
+  condition:
+    $udm
+}
